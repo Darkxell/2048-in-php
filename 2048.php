@@ -82,7 +82,9 @@ if(!isset($_GET["score"])){
 		footer.sub{
 			margin-left:10px;
 			margin-right:10px;
-			height:85px;
+			margin-top:365px;
+			padding-top:3px;
+			padding-bottom:3px;
 			background-color:#efefef;
 			border-radius: 15px;
 			box-shadow: -1px 2px 3px 1px #a9a9a9;
@@ -106,6 +108,7 @@ if(!isset($_GET["score"])){
 			padding-left:5px;
 			padding-right:5px;
 			margin-left:35px;
+			box-shadow: -1px 2px 3px 1px #a9a9a9;
 		}
 		header.sub span.new{
 			margin-left:15px;
@@ -115,6 +118,7 @@ if(!isset($_GET["score"])){
 			height:35px;
 			padding-left:5px;
 			padding-right:5px;
+			box-shadow: -1px 2px 3px 1px #a9a9a9;
 		}
 		header.sub span.new a{
 			color:Black;
@@ -152,17 +156,75 @@ if(!isset($_GET["score"])){
 			padding-bottom:10px;
 			padding-left:10px;
 			padding-right:10px;
+			float:left;
 		}
 		div.dpad{
-			
-			
-			
-			
+			float:right;
+			width:150px;
+			height:150px;
+			background-color:#efefef;
+			margin-right:70px;
+			margin-top:70px;
+			box-shadow: -1px 2px 3px 1px #a9a9a9;
+			padding-top:10px;
+			padding-bottom:10px;
+			padding-left:10px;
+			padding-right:10px;
+			border-radius: 15px;
 		}
-		div.dpad span.key{
-			
-			
-			
+		th.key{
+			height:45px;
+			width:45px;
+			border-radius:10px;
+			box-shadow: -1px 2px 3px 1px #a9a9a9;
+		}
+		th.key:hover{
+			box-shadow: -1px 2px 3px 1px #c9c9c9;
+			background-color:#e1e1e1;
+		}
+		th.key a{
+			font-size:35px;
+			text-decoration:none;
+			color:#efefef;
+		}
+		th.key:hover a{
+			color:#e1e1e1;
+		}
+		article.hbox{
+			margin-top:20px;
+			margin-bottom:20px;
+			margin-left:20px;
+			margin-right:20px;
+			background-color:#f3f3f3;
+			box-shadow: -1px 2px 3px 1px #a9a9a9;
+		}
+		article.hbox h1{
+			text-align:center;
+			overflow:hidden;
+			height:30px;
+		}
+		article.hbox header{
+			background-color:#fcfcfc;
+			box-shadow: -1px 2px 3px 1px #a9a9a9;
+		}
+		article.hbox:hover div.article_body{
+			display:block;
+		}
+		article.hbox:hover div.hidden{
+			display:block;
+		}
+		div.article_body{
+			margin-left:20px;
+			margin-right:20px;
+			margin-bottom:20px;
+			display:none;
+			background-color:#fcfcfc;
+			box-shadow: -1px 2px 3px 1px #a9a9a9;
+		}
+		div.hidden{
+			visibility:hidden;
+			display:none;
+			font-size:4px;
 		}
 		p.easteregg{
 			color:#fcfcfc;
@@ -234,10 +296,11 @@ if(!isset($_GET["score"])){
 				</strong>
 			</span>
 			<span class="score">
-			score : <?php echo($_GET["score"]) ; ?>
+				score :
+				<?php echo($_GET["score"]) ; ?>
 			</span>
 			<span class="new">
-				<a href="2048.php">New game<a>
+				<a href="2048.php">New game</a>
 			</span>
 		</header>
 		<br/>
@@ -269,11 +332,49 @@ if(!isset($_GET["score"])){
 				</tr>
 			</table>
 		</div>
+		<div class="dpad">
+			<table>
+			<tr>
+				<th></th>
+				<th class="key"><a href="">■■</a></th>
+				<th></th>
+			</tr>
+			<tr>
+				<th class="key"><a href="">■■</a></th>
+				<th></th>
+				<th class="key"><a href="">■■</a></th>
+			</tr>
+			<tr>
+				<th></th>
+				<th class="key"><a href="">■■</a></th>
+				<th></th>
+			</tr>
+			</table>
+		</div>
 		<br/>
 		<footer class="sub">
-			
-			
-			
+			<article class="hbox">
+				<header>
+					<h1>
+						How to play
+					</h1>
+				</header>
+				<div class="article_body">
+					This text is how to play.
+				</div>
+				<div class="hidden"><br/></div>
+			</article>
+			<article class="hbox">
+				<header>
+					<h1>
+						About me
+					</h1>
+				</header>
+				<div class="article_body">
+					This text is about me.
+				</div>
+				<div class="hidden"><br/></div>
+			</article>
 		</footer>
 		<br/>
 	</div>
