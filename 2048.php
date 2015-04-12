@@ -8,8 +8,8 @@ https://github.com/Darkxell/2048-in-php
 -------------------------------------------
 $_GET[] names
 
-move=(1,2,3,4)
-score=()
+move=(1,2,3,4) (Optionnal)
+score=(integer)
 c11= c12= c13= c14=
 c21= c22= c23= c24=  (int "tiles values")
 c31= c32= c33= c34=
@@ -27,12 +27,36 @@ function html_tile($tileid){
 	if($tilevalue==0){
 		return $string;
 	}else{
-		$string = '<div class="tile_'.$tilevalue.'"><br/>'.$tilevalue.'</div>';
-		return $string;
+		if($tilevalue <= 2048){
+			$string = '<div class="tile_'.$tilevalue.'"><br/>'.$tilevalue.'</div>';
+			return $string;
+		}
+		else{
+			$string = '<div class="tile_max"><br/>'.$tilevalue.'</div>';
+			return $string;
+		}
 	}
 }
-
-
+/* gettiles : returns the GET values of tiles in a get string
+(void) -> (String) */
+function gettiles(){
+	$string = "c11=".$_GET["c11"]."&c12=".$_GET["c12"]."&c13=".$_GET["c13"]."&c14=".$_GET["c14"]."&c21=".$_GET["c21"]."&c22=".$_GET["c22"]."&c23=".$_GET["c23"]."&c24=".$_GET["c24"]."&c31=".$_GET["c31"]."&c32=".$_GET["c32"]."&c33=".$_GET["c33"]."&c34=".$_GET["c34"]."&c41=".$_GET["c41"]."&c42=".$_GET["c42"]."&c43=".$_GET["c43"]."&c44=".$_GET["c44"]."" ;
+	return $string;
+	
+}
+/* getmoveresult : Return the GET values using the existing ones moved to a set direction.
+1 up - 2 right - 3 down - 4 left
+Keep in mind that this also generates a new 2 or 4 tile.
+(int) -> (String) */
+function getmoveresult($direction){
+	$string = "c11=0&c12=2&c13=4&c14=8&c21=16&c22=32&c23=64&c24=128&c31=256&c32=512&c33=1024&c34=2048&c41=4096&c42=8192&c43=16384&c44=32768";
+	return $string;
+}
+/* randomstart : returns a random GET url to start the game.
+(void) -> (String) */
+function randomstart(){
+	
+}
 
 
 
@@ -40,10 +64,14 @@ function html_tile($tileid){
 -----End of functions-----
 Redirects the user with the appropriate GET values if needed.*/
 if(!isset($_GET["score"])){
-	header("Location:2048.php?score=0&c11=0&c12=2&c13=4&c14=8&c21=16&c22=32&c23=64&c24=128&c31=256&c32=512&c33=1024&c34=2048&c41=0&c42=0&c43=0&c44=0");
+	header("Location:2048.php?score=0&c11=0&c12=2&c13=4&c14=8&c21=16&c22=32&c23=64&c24=128&c31=256&c32=512&c33=1024&c34=2048&c41=4096&c42=8192&c43=16384&c44=32768");
 	exit();
 }
-
+/*Redirects the user if he meant to move*/
+if(isset($_GET["move"])){
+	header("Location: 2048.php?score=".$_GET["score"]."&".getmoveresult($_GET["move"]));
+	exit();
+}
 
 
 
@@ -51,6 +79,8 @@ if(!isset($_GET["score"])){
 <!Doctype html>
 <html>
 <head>
+	<!--
+	-->
 	<meta charset="UTF-8"/>
 	<title>
 		2048 in php
@@ -208,7 +238,7 @@ if(!isset($_GET["score"])){
 			transition: height 1s;
 		}
 		article.hbox:hover{
-			height:300px;
+			height:333px;
 		}
 		article.hbox h1{
 			text-align:center;
@@ -223,6 +253,7 @@ if(!isset($_GET["score"])){
 			margin-bottom:20px;
 			background-color:#fcfcfc;
 			box-shadow: -1px 2px 3px 1px #a9a9a9;
+			text-align:justify;
 		}
 		div.hidden{
 			visibility:hidden;
@@ -391,17 +422,17 @@ if(!isset($_GET["score"])){
 			<table>
 			<tr>
 				<th></th>
-				<th class="key"><a href="">■■</a></th>
+				<th class="key"><a href="<?php echo("2048.php?score=".$_GET["score"]."&move=1&".gettiles()) ; ?>">■■</a></th>
 				<th></th>
 			</tr>
 			<tr>
-				<th class="key"><a href="">■■</a></th>
+				<th class="key"><a href="<?php echo("2048.php?score=".$_GET["score"]."&move=4&".gettiles()) ; ?>">■■</a></th>
 				<th></th>
-				<th class="key"><a href="">■■</a></th>
+				<th class="key"><a href="<?php echo("2048.php?score=".$_GET["score"]."&move=2&".gettiles()) ; ?>">■■</a></th>
 			</tr>
 			<tr>
 				<th></th>
-				<th class="key"><a href="">■■</a></th>
+				<th class="key"><a href="<?php echo("2048.php?score=".$_GET["score"]."&move=3&".gettiles()) ; ?>">■■</a></th>
 				<th></th>
 			</tr>
 			</table>
@@ -430,6 +461,8 @@ if(!isset($_GET["score"])){
 						Your goal is to form a 2048 tile.
 						<br/><br/>
 						Good luck!
+						<br/>
+						You will need it...
 					</p>
 				</div>
 				<div class="hidden"><br/></div>
@@ -455,6 +488,8 @@ if(!isset($_GET["score"])){
 						neko yourself.
 						<br/><br/>
 						Love ya!
+						<br/><br/>
+						<a href="mailto:darkxell.mc@gmail.com">Mail me</a>
 					</p>
 				</div>
 				<div class="hidden"><br/></div>
