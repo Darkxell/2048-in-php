@@ -40,7 +40,7 @@ function html_tile($tileid){
 -----End of functions-----
 Redirects the user with the appropriate GET values if needed.*/
 if(!isset($_GET["score"])){
-	header("Location:2048.php?score=0&c11=0&c12=0&c13=0&c14=0&c21=0&c22=0&c23=0&c24=0&c31=0&c32=0&c33=0&c34=0&c41=0&c42=0&c43=0&c44=0");
+	header("Location:2048.php?score=0&c11=0&c12=2&c13=4&c14=8&c21=16&c22=32&c23=64&c24=128&c31=256&c32=512&c33=1024&c34=2048&c41=0&c42=0&c43=0&c44=0");
 	exit();
 }
 
@@ -55,8 +55,10 @@ if(!isset($_GET["score"])){
 	<title>
 		2048 in php
 	</title>
+	<link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
 	<style type="text/css">
 		body{
+			font-family: 'Roboto', sans-serif;
 			background-color:#dedede;
 		}
 		footer.main{
@@ -231,48 +233,101 @@ if(!isset($_GET["score"])){
 			font-size:9px;
 		}
 		div.tile_2{
-			height:80px;
-			width:80px;
-			background-color:Yellow;
+			height:78px;
+			width:78px;
+			background-color:#eee4da;
+			color:#786e64;
 			border-radius: 15px;
 			font-size:22px;
 		}
 		div.tile_4{
-			height:80px;
-			width:80px;
-			background-color:Yellow;
+			height:78px;
+			width:78px;
+			background-color:#ece0c6;
 			border-radius: 15px;
 			font-size:22px;
+			color:#786e64;
 		}
 		div.tile_8{
-			height:80px;
-			width:80px;
-			background-color:Yellow;
+			height:78px;
+			width:78px;
+			background-color:#f2b179;
 			border-radius: 15px;
 			font-size:22px;
+			color:White;
 		}
 		div.tile_16{
-			height:80px;
-			width:80px;
-			background-color:Yellow;
+			height:78px;
+			width:78px;
+			background-color:#ef8d4c;
 			border-radius: 15px;
 			font-size:22px;
+			color:White;
 		}
 		div.tile_32{
-			height:80px;
-			width:80px;
-			background-color:Yellow;
+			height:78px;
+			width:78px;
+			background-color:#f77b61;
 			border-radius: 15px;
 			font-size:22px;
+			color:White;
 		}
 		div.tile_64{
-			height:80px;
-			width:80px;
-			background-color:Yellow;
+			height:78px;
+			width:78px;
+			background-color:#e85a36;
 			border-radius: 15px;
 			font-size:22px;
+			color:White;
 		}
-		
+		div.tile_128{
+			height:78px;
+			width:78px;
+			background-color:#f1d96b;
+			border-radius: 15px;
+			font-size:22px;
+			color:White;
+		}
+		div.tile_256{
+			height:78px;
+			width:78px;
+			background-color:#ead34f;
+			border-radius: 15px;
+			font-size:22px;
+			color:White;
+		}
+		div.tile_512{
+			height:78px;
+			width:78px;
+			background-color:#e2c029;
+			border-radius: 15px;
+			font-size:22px;
+			color:White;
+		}
+		div.tile_1024{
+			height:78px;
+			width:78px;
+			background-color:#e4b914;
+			border-radius: 15px;
+			font-size:22px;
+			color:White;
+		}
+		div.tile_2048{
+			height:78px;
+			width:78px;
+			background-color:#efc302;
+			border-radius: 15px;
+			font-size:22px;
+			color:White;
+		}
+		div.tile_max{
+			height:78px;
+			width:78px;
+			background-color:Black;
+			border-radius: 15px;
+			font-size:22px;
+			color:White;
+		}
 	</style>
 </head>
 <body>
