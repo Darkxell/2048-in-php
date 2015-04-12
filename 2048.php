@@ -109,6 +109,7 @@ if(!isset($_GET["score"])){
 			padding-right:5px;
 			margin-left:35px;
 			box-shadow: -1px 2px 3px 1px #a9a9a9;
+			transition: all .2s ease-in-out;
 		}
 		header.sub span.new{
 			margin-left:15px;
@@ -119,6 +120,7 @@ if(!isset($_GET["score"])){
 			padding-left:5px;
 			padding-right:5px;
 			box-shadow: -1px 2px 3px 1px #a9a9a9;
+			transition: all .2s ease-in-out;
 		}
 		header.sub span.new a{
 			color:Black;
@@ -177,6 +179,7 @@ if(!isset($_GET["score"])){
 			width:45px;
 			border-radius:10px;
 			box-shadow: -1px 2px 3px 1px #a9a9a9;
+			transition: all .15s ease-in-out;
 		}
 		th.key:hover{
 			box-shadow: -1px 2px 3px 1px #c9c9c9;
@@ -186,6 +189,7 @@ if(!isset($_GET["score"])){
 			font-size:35px;
 			text-decoration:none;
 			color:#efefef;
+			transition: all .15s ease-in-out;
 		}
 		th.key:hover a{
 			color:#e1e1e1;
@@ -197,33 +201,29 @@ if(!isset($_GET["score"])){
 			margin-right:20px;
 			background-color:#f3f3f3;
 			box-shadow: -1px 2px 3px 1px #a9a9a9;
+			height:67px;
+			overflow:hidden;
+			transition: height 1s;
+		}
+		article.hbox:hover{
+			height:300px;
 		}
 		article.hbox h1{
 			text-align:center;
-			overflow:hidden;
-			height:30px;
 		}
 		article.hbox header{
 			background-color:#fcfcfc;
 			box-shadow: -1px 2px 3px 1px #a9a9a9;
 		}
-		article.hbox:hover div.article_body{
-			display:block;
-		}
-		article.hbox:hover div.hidden{
-			display:block;
-		}
 		div.article_body{
 			margin-left:20px;
 			margin-right:20px;
 			margin-bottom:20px;
-			display:none;
 			background-color:#fcfcfc;
 			box-shadow: -1px 2px 3px 1px #a9a9a9;
 		}
 		div.hidden{
 			visibility:hidden;
-			display:none;
 			font-size:4px;
 		}
 		p.easteregg{
@@ -360,7 +360,22 @@ if(!isset($_GET["score"])){
 					</h1>
 				</header>
 				<div class="article_body">
-					This text is how to play.
+					<p>
+						2048 is a puzzle game that got popular on smartphones devices.
+						<br/><br/>
+						It consist in merging similar tiles that appears on a grid to form bigger ones.
+						<br/>
+						Tiles that are going to appear are 2 and 4 , and you can slide them in a direction
+						using the Dpad on the right. Each time you move a new tile will appear at a random location.
+						<br/>
+						You will lose if you can't make any move at all.
+						<br/>
+						Your score increases each time you merge two tiles together, by the value of the merged tile.
+						<br/>
+						Your goal is to form a 2048 tile.
+						<br/><br/>
+						Good luck!
+					</p>
 				</div>
 				<div class="hidden"><br/></div>
 			</article>
@@ -371,7 +386,21 @@ if(!isset($_GET["score"])){
 					</h1>
 				</header>
 				<div class="article_body">
-					This text is about me.
+					<p>
+						You want to know about me do ya?
+						<br/><br/>
+						I'm Nicolas Candela, also known as Darkxell.
+						<br/>
+						I love programming, obviously, and computing in general. This project 
+						is a little challenge for me, because I want a 2048 game in only one
+						file, with no Javascript, no Cookies and no Flash. Here's the result!
+						<br/><br/>
+						I also love nekos, but that's not the point. You can mail me if you want
+						to know something about me, want a collab on a project or if you are a 
+						neko yourself.
+						<br/><br/>
+						Love ya!
+					</p>
 				</div>
 				<div class="hidden"><br/></div>
 			</article>
