@@ -8,7 +8,7 @@ https://github.com/Darkxell/2048-in-php
 -------------------------------------------
 $_GET[] names
 
-move=(1,2,3,4) (Optionnal)
+move=(1) (Optionnal)
 score=(integer)
 c11= c12= c13= c14=
 c21= c22= c23= c24=  (int "tiles values")
@@ -42,15 +42,137 @@ function html_tile($tileid){
 function gettiles(){
 	$string = "c11=".$_GET["c11"]."&c12=".$_GET["c12"]."&c13=".$_GET["c13"]."&c14=".$_GET["c14"]."&c21=".$_GET["c21"]."&c22=".$_GET["c22"]."&c23=".$_GET["c23"]."&c24=".$_GET["c24"]."&c31=".$_GET["c31"]."&c32=".$_GET["c32"]."&c33=".$_GET["c33"]."&c34=".$_GET["c34"]."&c41=".$_GET["c41"]."&c42=".$_GET["c42"]."&c43=".$_GET["c43"]."&c44=".$_GET["c44"]."" ;
 	return $string;
-	
+}
+/* line_move : takes four values and return them moved to the right.
+(int,int,int,int) -> array(1,2,3,4) */
+function line_move($v1,$v2,$v3,$v4){
+	if( $v4 == 0 ){
+		$v4=$v3;
+		$v3=0;
+	}
+	if( $v3 == 0 ){
+		$v3=$v2;
+		$v2=0;
+	}
+	if( $v4 == 0 ){
+		$v4=$v3;
+		$v3=0;
+	}
+	if( $v2 == 0 ){
+		$v2=$v1;
+		$v1=0;
+	}
+	if( $v3 == 0 ){
+		$v3=$v2;
+		$v2=0;
+	}
+	if( $v4 == 0 ){
+		$v4=$v3;
+		$v3=0;
+	}
+	//Merge 3 and 4
+	if( $v4 == $v3 ){
+		$v4 = $v4 * 2 ;
+		$v3 = 0 ;
+	}
+	if( $v3 == 0 ){
+		$v3=$v2;
+		$v2=0;
+	}
+	if( $v2 == 0 ){
+		$v2=$v1;
+		$v1=0;
+	}
+	//Merge 2 and 3
+	if( $v3 == $v2 ){
+		$v3 = $v3 * 2 ;
+		$v2 = 0 ;
+	}
+	if( $v2 == 0 ){
+		$v2=$v1;
+		$v1=0;
+	}
+	//Merge 1 and 2
+	if( $v2 == $v1 ){
+		$v2 = $v2 * 2 ;
+		$v1 = 0 ;
+	}
+	$ret = [ 1 => $v1 , 2 => $v2 , 3 => $v3 , 4 => $v4 ] ;
+	return $ret ;
 }
 /* getmoveresult : Return the GET values using the existing ones moved to a set direction.
 1 up - 2 right - 3 down - 4 left
-Keep in mind that this also generates a new 2 or 4 tile.
+This doesn't generate any new tiles.
 (int) -> (String) */
 function getmoveresult($direction){
-	$string = "c11=0&c12=2&c13=4&c14=8&c21=16&c22=32&c23=64&c24=128&c31=256&c32=512&c33=1024&c34=2048&c41=4096&c42=8192&c43=16384&c44=32768";
-	return $string;
+	$result = "";
+	if($direction == 1){
+		$a1 = line_move($_GET["c41"],$_GET["c31"],$_GET["c21"],$_GET["c11"]) ;
+		$a2 = line_move($_GET["c42"],$_GET["c32"],$_GET["c22"],$_GET["c12"]) ;
+		$a3 = line_move($_GET["c43"],$_GET["c33"],$_GET["c23"],$_GET["c13"]) ;
+		$a4 = line_move($_GET["c44"],$_GET["c34"],$_GET["c24"],$_GET["c14"]) ;
+		$result = "c11=".$a1[4]."&c12=".$a2[4]."&c13=".$a3[4]."&c14=".$a4[4]."&c21=".$a1[3]."&c22=".$a2[3]."&c23=".$a3[3]."&c24=".$a4[3]."&c31=".$a1[2]."&c32=".$a2[2]."&c33=".$a3[2]."&c34=".$a4[2]."&c41=".$a1[1]."&c42=".$a2[1]."&c43=".$a3[1]."&c44=".$a4[1] ;
+		return $result ;
+	}
+	if($direction == 2){
+		$a1 = line_move($_GET["c11"],$_GET["c12"],$_GET["c13"],$_GET["c14"]) ;
+		$a2 = line_move($_GET["c21"],$_GET["c22"],$_GET["c23"],$_GET["c24"]) ;
+		$a3 = line_move($_GET["c31"],$_GET["c32"],$_GET["c33"],$_GET["c34"]) ;
+		$a4 = line_move($_GET["c41"],$_GET["c42"],$_GET["c43"],$_GET["c44"]) ;
+		$result = "c11=".$a1[1]."&c12=".$a1[2]."&c13=".$a1[3]."&c14=".$a1[4]."&c21=".$a2[1]."&c22=".$a2[2]."&c23=".$a2[3]."&c24=".$a2[4]."&c31=".$a3[1]."&c32=".$a3[2]."&c33=".$a3[3]."&c34=".$a3[4]."&c41=".$a4[1]."&c42=".$a4[2]."&c43=".$a4[3]."&c44=".$a4[4] ;
+		return $result ;
+	}
+	if($direction == 3){
+		$a1 = line_move($_GET["c11"],$_GET["c21"],$_GET["c31"],$_GET["c41"]) ;
+		$a2 = line_move($_GET["c12"],$_GET["c22"],$_GET["c32"],$_GET["c42"]) ;
+		$a3 = line_move($_GET["c13"],$_GET["c23"],$_GET["c33"],$_GET["c43"]) ;
+		$a4 = line_move($_GET["c14"],$_GET["c24"],$_GET["c34"],$_GET["c44"]) ;
+		$result = "c11=".$a1[1]."&c12=".$a2[1]."&c13=".$a3[1]."&c14=".$a4[1]."&c21=".$a1[2]."&c22=".$a2[2]."&c23=".$a3[2]."&c24=".$a4[2]."&c31=".$a1[3]."&c32=".$a2[3]."&c33=".$a3[3]."&c34=".$a4[3]."&c41=".$a1[4]."&c42=".$a2[4]."&c43=".$a3[4]."&c44=".$a4[4] ;
+		return $result ;
+	}
+	if($direction == 4){
+		$a1 = line_move($_GET["c14"],$_GET["c13"],$_GET["c12"],$_GET["c11"]) ;
+		$a2 = line_move($_GET["c24"],$_GET["c23"],$_GET["c22"],$_GET["c21"]) ;
+		$a3 = line_move($_GET["c34"],$_GET["c33"],$_GET["c32"],$_GET["c31"]) ;
+		$a4 = line_move($_GET["c44"],$_GET["c43"],$_GET["c42"],$_GET["c41"]) ;
+		$result = "c11=".$a1[4]."&c12=".$a1[3]."&c13=".$a1[2]."&c14=".$a1[1]."&c21=".$a2[4]."&c22=".$a2[3]."&c23=".$a2[2]."&c24=".$a2[1]."&c31=".$a3[4]."&c32=".$a3[3]."&c33=".$a3[2]."&c34=".$a3[1]."&c41=".$a4[4]."&c42=".$a4[3]."&c43=".$a4[2]."&c44=".$a4[1] ;
+		return $result ;
+	}
+	return $result;
+}
+/* addrandtile : generates a GET url with a new tile at a random location
+(void) -> (string)*/
+function addrandtile(){
+	$test = ! canplay() ;
+	while($test){
+		$x = rand(1,4) ;
+		$y = rand(1,4) ;
+		if ($_GET["c".$x.$y] == 0) {
+			$newtilevalue = 2 * rand(1,2) ;
+			$test = false;
+			$returnurl = gentileget($newtilevalue,$x,$y,11)."&".gentileget($newtilevalue,$x,$y,12)."&".gentileget($newtilevalue,$x,$y,13)."&".gentileget($newtilevalue,$x,$y,14)."&" ;
+			$returnurl = $returnurl.gentileget($newtilevalue,$x,$y,21)."&".gentileget($newtilevalue,$x,$y,22)."&".gentileget($newtilevalue,$x,$y,23)."&".gentileget($newtilevalue,$x,$y,24)."&" ;
+			$returnurl = $returnurl.gentileget($newtilevalue,$x,$y,31)."&".gentileget($newtilevalue,$x,$y,32)."&".gentileget($newtilevalue,$x,$y,33)."&".gentileget($newtilevalue,$x,$y,34)."&" ;
+			$returnurl = $returnurl.gentileget($newtilevalue,$x,$y,41)."&".gentileget($newtilevalue,$x,$y,42)."&".gentileget($newtilevalue,$x,$y,43)."&".gentileget($newtilevalue,$x,$y,44) ;
+			return $returnurl ;
+		}
+	}
+	return "";
+}
+/* gentileget : Usual function for addrandtile() .
+(int,int,int,int) -> (string)
+*/
+function gentileget ($tv,$sx,$sy,$tile_sid) {
+	if("c".$sx.$sy == "c".$tile_sid){
+				return "c".$tile_sid."=".$tv ;
+			} else {
+				return "c".$tile_sid."=".$_GET["c".$tile_sid] ;
+			}
+}
+/* canplay : returns if the user can play using curent GET values
+(void) -> (boolean)*/
+function canplay(){
+	
 }
 /* randomstart : returns a random GET url to start the game.
 (void) -> (String) */
@@ -64,12 +186,12 @@ function randomstart(){
 -----End of functions-----
 Redirects the user with the appropriate GET values if needed.*/
 if(!isset($_GET["score"])){
-	header("Location:2048.php?score=0&c11=0&c12=2&c13=4&c14=8&c21=16&c22=32&c23=64&c24=128&c31=256&c32=512&c33=1024&c34=2048&c41=4096&c42=8192&c43=16384&c44=32768");
+	header("Location:2048.php?score=0&c11=0&c12=0&c13=0&c14=0&c21=0&c22=0&c23=0&c24=2&c31=4&c32=0&c33=0&c34=0&c41=0&c42=0&c43=0&c44=0");
 	exit();
 }
-/*Redirects the user if he meant to move*/
+/*Spawns a tile if the user moved*/
 if(isset($_GET["move"])){
-	header("Location: 2048.php?score=".$_GET["score"]."&".getmoveresult($_GET["move"]));
+	header("Location:2048.php?score=".$_GET["score"]."&".addrandtile()) ;
 	exit();
 }
 
@@ -422,17 +544,17 @@ if(isset($_GET["move"])){
 			<table>
 			<tr>
 				<th></th>
-				<th class="key"><a href="<?php echo("2048.php?score=".$_GET["score"]."&move=1&".gettiles()) ; ?>">■■</a></th>
+				<th class="key"><a href="<?php echo("2048.php?score=".$_GET["score"]."&move=1&".getmoveresult(1)) ; ?>">■■</a></th>
 				<th></th>
 			</tr>
 			<tr>
-				<th class="key"><a href="<?php echo("2048.php?score=".$_GET["score"]."&move=4&".gettiles()) ; ?>">■■</a></th>
+				<th class="key"><a href="<?php echo("2048.php?score=".$_GET["score"]."&move=1&".getmoveresult(4)) ; ?>">■■</a></th>
 				<th></th>
-				<th class="key"><a href="<?php echo("2048.php?score=".$_GET["score"]."&move=2&".gettiles()) ; ?>">■■</a></th>
+				<th class="key"><a href="<?php echo("2048.php?score=".$_GET["score"]."&move=1&".getmoveresult(2)) ; ?>">■■</a></th>
 			</tr>
 			<tr>
 				<th></th>
-				<th class="key"><a href="<?php echo("2048.php?score=".$_GET["score"]."&move=3&".gettiles()) ; ?>">■■</a></th>
+				<th class="key"><a href="<?php echo("2048.php?score=".$_GET["score"]."&move=1&".getmoveresult(3)) ; ?>">■■</a></th>
 				<th></th>
 			</tr>
 			</table>
