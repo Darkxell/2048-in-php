@@ -24,4 +24,4 @@ If you're interested in similar projects featuring javascript, just google it, y
    See the License for the specific language governing permissions and
    limitations under the License.
    
-   "Darkxell" refers in this document and in "the license" to Nicolas Candela.
+   "Darkxell" refers in this document, the source code and in "the license" to Nicolas Candela.
