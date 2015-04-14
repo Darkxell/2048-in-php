@@ -23,3 +23,5 @@ If you're interested in similar projects featuring javascript, just google it, y
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+   
+   "Darkxell" refers in this document and in "the license" to Nicolas Candela.
