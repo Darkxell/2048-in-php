@@ -143,7 +143,7 @@ function getmoveresult($direction){
 /* addrandtile : generates a GET url with a new tile at a random location
 (void) -> (string)*/
 function addrandtile(){
-	$test = ! canplay() ;
+	$test = canplay() ;
 	while($test){
 		$x = rand(1,4) ;
 		$y = rand(1,4) ;
@@ -172,21 +172,70 @@ function gentileget ($tv,$sx,$sy,$tile_sid) {
 /* canplay : returns if the user can play using curent GET values
 (void) -> (boolean)*/
 function canplay(){
-	
+	for($for_1=1;$for_1<4;$for_1++){
+		for($for_2=1;$for_2<4;$for_2++){
+			if ($_GET["c".$for_1.$for_2] == 0){
+				return true;
+			}
+		}
+	}
+	for($for_1=1;$for_1<4;$for_1++){
+		for($for_2=1;$for_2<3;$for_2++){
+			if($_GET["c".$for_1.$for_2] == $_GET["c".$for_1.($for_2 + 1)]){
+				return true ;
+			}
+		}
+	}
+	for($for_1=1;$for_1<4;$for_1++){
+		for($for_2=1;$for_2<3;$for_2++){
+			if($_GET["c".$for_2.$for_1] == $_GET["c".($for_2 + 1).$for_1]){
+				return true ;
+			}
+		}
+	}
+	return false;
 }
-/* randomstart : returns a random GET url to start the game.
+/* randomstart : returns a random GET url to start the game on 10 templates (Cuz i'm lazy...)
 (void) -> (String) */
 function randomstart(){
-	
+	$randomstart = rand(1,10) ;
+	if( $randomstart == 1 ){
+		return "Location:2048.php?score=0&c11=0&c12=0&c13=0&c14=0&c21=2&c22=0&c23=0&c24=0&c31=0&c32=0&c33=2&c34=0&c41=0&c42=0&c43=0&c44=0" ;
+	}
+	if( $randomstart == 2 ){
+		return "Location:2048.php?score=0&c11=2&c12=0&c13=0&c14=0&c21=0&c22=2&c23=0&c24=0&c31=0&c32=0&c33=0&c34=0&c41=0&c42=0&c43=0&c44=0" ;
+	}
+	if( $randomstart == 3 ){
+		return "Location:2048.php?score=0&c11=0&c12=0&c13=0&c14=0&c21=0&c22=0&c23=0&c24=0&c31=0&c32=0&c33=0&c34=0&c41=0&c42=2&c43=0&c44=4" ;
+	}
+	if( $randomstart == 4 ){
+		return "Location:2048.php?score=0&c11=0&c12=0&c13=0&c14=0&c21=0&c22=2&c23=4&c24=0&c31=0&c32=0&c33=0&c34=0&c41=0&c42=0&c43=0&c44=0" ;
+	}
+	if( $randomstart == 5 ){
+		return "Location:2048.php?score=0&c11=0&c12=0&c13=0&c14=2&c21=0&c22=0&c23=0&c24=0&c31=0&c32=0&c33=4&c34=0&c41=0&c42=0&c43=0&c44=0" ;
+	}
+	if( $randomstart == 6 ){
+		return "Location:2048.php?score=0&c11=0&c12=0&c13=2&c14=0&c21=0&c22=0&c23=2&c24=0&c31=0&c32=0&c33=0&c34=0&c41=0&c42=0&c43=0&c44=0" ;
+	}
+	if( $randomstart == 7 ){
+		return "Location:2048.php?score=0&c11=0&c12=0&c13=0&c14=0&c21=0&c22=0&c23=4&c24=0&c31=0&c32=0&c33=0&c34=0&c41=0&c42=4&c43=0&c44=0" ;
+	}
+	if( $randomstart == 8 ){
+		return "Location:2048.php?score=0&c11=2&c12=0&c13=0&c14=0&c21=0&c22=2&c23=0&c24=4&c31=0&c32=0&c33=0&c34=0&c41=0&c42=0&c43=2&c44=0" ;
+	}
+	if( $randomstart == 9 ){
+		return "Location:2048.php?score=0&c11=0&c12=0&c13=0&c14=2&c21=0&c22=0&c23=0&c24=2&c31=0&c32=2&c33=0&c34=0&c41=0&c42=0&c43=0&c44=0" ;
+	}
+	if( $randomstart == 10 ){
+		return "Location:2048.php?score=0&c11=0&c12=0&c13=0&c14=0&c21=0&c22=0&c23=0&c24=0&c31=0&c32=0&c33=2&c34=2&c41=0&c42=0&c43=0&c44=0" ;
+	}
 }
-
-
 
 /*
 -----End of functions-----
 Redirects the user with the appropriate GET values if needed.*/
 if(!isset($_GET["score"])){
-	header("Location:2048.php?score=0&c11=0&c12=0&c13=0&c14=0&c21=0&c22=0&c23=0&c24=2&c31=4&c32=0&c33=0&c34=0&c41=0&c42=0&c43=0&c44=0");
+	header(randomstart());
 	exit();
 }
 /*Spawns a tile if the user moved*/
@@ -625,4 +674,22 @@ if(isset($_GET["move"])){
 		</p>
 	</footer>
 </body>
+<!--
+Copyright 2015 Darkxell
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+"Darkxell" refers in this document and in "the license" to Nicolas Candela,
+the "Licensor".
+-->
 </html>
