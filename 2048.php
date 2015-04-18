@@ -1,12 +1,11 @@
 <?php
-/*
-------------ABOUT THIS PROJECT-------------
+/*------------ABOUT THIS PROJECT-------------
 
 Everything is on Github.
 https://github.com/Darkxell/2048-in-php
 
--------------------------------------------
-$_GET[] names
+-------------------------------------------*/
+/*     $_GET[] names
 
 move=(1) (Optionnal)
 score=(integer)
@@ -15,8 +14,14 @@ c21= c22= c23= c24=  (int "tiles values")
 c31= c32= c33= c34=
 c41= c42= c43= c44=
 
+page = (unset/0  or  1  or  2)
+uset/0 => normal game
+1      => End page
+2      => Easter egg page
+
 */
-/*-----Functions-----*/
+?>
+<?php /*-----Functions-----*/
 
 /* html_tile : Get the tile id and return the HTML div for that tile if needed,
 returns an empty String if the tile is blank.
@@ -143,7 +148,7 @@ function getmoveresult($direction){
 /* addrandtile : generates a GET url with a new tile at a random location
 (void) -> (string)*/
 function addrandtile(){
-	$test = canplay() ;
+	$test = hasvoid() ;
 	while($test){
 		$x = rand(1,4) ;
 		$y = rand(1,4) ;
@@ -157,7 +162,7 @@ function addrandtile(){
 			return $returnurl ;
 		}
 	}
-	return "";
+	return (gettiles());
 }
 /* gentileget : Usual function for addrandtile() .
 (int,int,int,int) -> (string)
@@ -169,26 +174,26 @@ function gentileget ($tv,$sx,$sy,$tile_sid) {
 				return "c".$tile_sid."=".$_GET["c".$tile_sid] ;
 			}
 }
-/* canplay : returns if the user can play using curent GET values
+/* canplay (predicate): returns if the user can play using curent GET values
 (void) -> (boolean)*/
 function canplay(){
-	for($for_1=1;$for_1<4;$for_1++){
-		for($for_2=1;$for_2<4;$for_2++){
+	for($for_1=1;$for_1<=4;$for_1++){
+		for($for_2=1;$for_2<=4;$for_2++){
 			if ($_GET["c".$for_1.$for_2] == 0){
 				return true;
 			}
 		}
 	}
-	for($for_1=1;$for_1<4;$for_1++){
-		for($for_2=1;$for_2<3;$for_2++){
+	for($for_1=1;$for_1<=4;$for_1++){
+		for($for_2=1;$for_2<=3;$for_2++){
 			if($_GET["c".$for_1.$for_2] == $_GET["c".$for_1.($for_2 + 1)]){
 				return true ;
 			}
 		}
 	}
-	for($for_1=1;$for_1<4;$for_1++){
-		for($for_2=1;$for_2<3;$for_2++){
-			if($_GET["c".$for_2.$for_1] == $_GET["c".($for_2 + 1).$for_1]){
+	for($for_1=1;$for_1<=3;$for_1++){
+		for($for_2=1;$for_2<=4;$for_2++){
+			if($_GET["c".$for_1.$for_2] == $_GET["c".($for_1 + 1).$for_2]){
 				return true ;
 			}
 		}
@@ -230,10 +235,39 @@ function randomstart(){
 		return "Location:2048.php?score=0&c11=0&c12=0&c13=0&c14=0&c21=0&c22=0&c23=0&c24=0&c31=0&c32=0&c33=2&c34=2&c41=0&c42=0&c43=0&c44=0" ;
 	}
 }
+/* haswon (predicate): returns if the user won using curent GET values
+(void) -> (boolean)*/
+function haswon(){
+	for($for_1=1;$for_1<=4;$for_1++){
+		for($for_2=1;$for_2<=4;$for_2++){
+			if ($_GET["c".$for_1.$for_2] >= 2048 ){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+/* hasvoid (predicate): returns if the current grid has at least 1 empty space.
+(void) -> (boolean)*/
+function hasvoid(){
+	for($for_1=1;$for_1<=4;$for_1++){
+		for($for_2=1;$for_2<=4;$for_2++){
+			if ($_GET["c".$for_1.$for_2] == 0){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+
 
 /*
 -----End of functions-----
-Redirects the user with the appropriate GET values if needed.*/
+*/
+?>
+<?php
+/*Redirects the user with the appropriate GET values if needed.*/
 if(!isset($_GET["score"])){
 	header(randomstart());
 	exit();
@@ -243,7 +277,20 @@ if(isset($_GET["move"])){
 	header("Location:2048.php?score=".$_GET["score"]."&".addrandtile()) ;
 	exit();
 }
+/*Takes you to the end page if you can't play.*/
+if( ! isset($_GET["page"]) || $_GET["page"] == 0){
+	if( ! canplay() ) {
+		header("Location:2048.php?score=".$_GET["score"]."&page=1") ;
+		exit() ;
+	}	
+}
 
+/*Sets up the id of the page to display in the $page variable*/
+if(isset($_GET["page"])){
+	$page = $_GET["page"] ;
+} else {
+	$page = 0 ;
+}
 
 
 ?>
@@ -251,6 +298,7 @@ if(isset($_GET["move"])){
 <html>
 <head>
 	<!--
+		Insert Ascii art here.
 	-->
 	<meta charset="UTF-8"/>
 	<title>
@@ -418,6 +466,21 @@ if(isset($_GET["move"])){
 			background-color:#fcfcfc;
 			box-shadow: -1px 2px 3px 1px #a9a9a9;
 		}
+		article.textbox{
+			margin-top:20px;
+			margin-bottom:20px;
+			margin-left:20px;
+			margin-right:20px;
+			background-color:#f3f3f3;
+			box-shadow: -1px 2px 3px 1px #a9a9a9;
+		}
+		article.textbox h1{
+			text-align:center;
+		}
+		article.textbox header{
+			background-color:#fcfcfc;
+			box-shadow: -1px 2px 3px 1px #a9a9a9;
+		}
 		div.article_body{
 			margin-left:20px;
 			margin-right:20px;
@@ -433,6 +496,10 @@ if(isset($_GET["move"])){
 		p.easteregg{
 			color:#fcfcfc;
 			font-size:9px;
+		}
+		p.easteregg a{
+			text-decoration:none;
+			color:#fcfcfc;
 		}
 		div.tile_2{
 			height:78px;
@@ -542,8 +609,14 @@ if(isset($_GET["move"])){
 		</p>
 	</header>
 	<div class="page">
+		<?php
+		if($page == 0) {
+		//Displays the normal page.
+		?>
 		<p class="easteregg">
-			You found an easter egg. How lucky!
+			You found an easter egg. How lucky! Click 
+			<a href="2048.php?score=<?php echo($_GET["score"]."&".gettiles()."&page=2") ?>">here</a> 
+			to claim your prize.
 		</p>
 		<header class="sub">
 			<br/>
@@ -665,8 +738,155 @@ if(isset($_GET["move"])){
 				</div>
 				<div class="hidden"><br/></div>
 			</article>
+			<?php
+			//Displays an article if you have a 2048 or higher tile on the grid.
+			if(haswon()){
+			?>
+			<article class="hbox">
+				<header>
+					<h1>
+						Because you won
+					</h1>
+				</header>
+				<div class="article_body">
+					<p>
+						Hum... It seems like you indeed won the game.
+						<br/><br/>
+						Congratulations!
+						<br/>
+						I was not expecting this... But maybe you are better than expected!
+						But you achieved nothing. Do you feel happy about it? You shouldn't.
+						You lost your time here... But are you going to continue wasting it?
+						<br/>
+						Maybe... 
+						<br/><br/>
+						By the way, did you find the easter egg? I think it's worth it!
+						<br/><br/>
+						Thanks for playing anyways!
+						<br/><br/>
+						More of my games here : [I'm a lazy developper.]
+					</p>
+				</div>
+				<div class="hidden"><br/></div>
+			</article>
+			<?php
+			}
+			//Displays an article if you have a very very high score, indicating
+			//you cheated.
+			if( $_GET["score"] > 300000 ){
+			?>
+			<article class="hbox">
+				<header>
+					<h1>
+						Because you won
+					</h1>
+				</header>
+				<div class="article_body">
+					<p>
+						Hum... It seems like you indeed won the game.
+						<br/><br/>
+						Congratulations!
+						<br/>
+						I was not expecting this... But maybe you are better than expected!
+						But you achieved nothing. Do you feel happy about it? You shouldn't.
+						You lost your time here... But are you going to continue wasting it?
+						<br/>
+						Maybe... 
+						<br/><br/>
+						By the way, did you find the easter egg? I think it's worth it!
+						<br/><br/>
+						Thanks for playing anyways!
+						<br/><br/>
+						More of my games here : [I'm a lazy developper.]
+					</p>
+				</div>
+				<div class="hidden"><br/></div>
+			</article>
+			<?php
+			}
+			?>
 		</footer>
 		<br/>
+		<?php
+		} // End of the $page=0
+		if($page == 1){
+		//page if you have lost
+		?>
+		<p class="easteregg">
+			You found an easter egg. How lucky!
+		</p>
+		<header class="sub">
+			<br/>
+			<span class="title">
+				<strong>
+					2048
+				</strong>
+			</span>
+			<span class="score">
+				score :
+				<?php echo($_GET["score"]) ; ?>
+			</span>
+			<span class="new">
+				<a href="2048.php">New game</a>
+			</span>
+		</header>
+		<footer>
+			<article class="textbox">
+				<br/>
+				<header>
+					<h1>
+						Game Over
+					</h1>
+				</header>
+				<br/>
+				<div class="article_body">
+					<p>
+						It's game over...
+						<br/><br/>
+						Sorry! Maybe you will do better next time! I hope you had fun,
+						thank you for hanging around!
+						<br/>
+						Feel free to mail me for any suggestion or feedback, that's
+						always appreciated.
+						<br/><br/><br/>
+						Share your score [Comming soon]
+						<br/><br/>
+					</p>
+				</div>
+				<div class="hidden"><br/></div>
+			</article>
+			<br/><br/>
+		</footer>
+		<?php
+		} // End of the $page=1
+		if($page == 2){
+		?>
+		<p class="easteregg">
+			Yes, the easter egg is still there. You really notice things...
+		</p>
+		<header class="sub">
+			<br/>
+			<span class="title">
+				<strong>
+					2048
+				</strong>
+			</span>
+			<span class="score">
+				score :
+				<?php echo($_GET["score"]) ; ?>
+			</span>
+			<span class="new">
+				<a href="2048.php?score=<?php echo($_GET["score"]."&".gettiles()) ; ?>">Continue</a>
+			</span>
+		</header>
+		
+		<br/>
+		PAGE 2 (EASTEREGG)
+		<br/>
+		
+		<?php
+		} //end of $page=2 (easteregg)
+		?>
 	</div>
 	<footer class="main">
 		<p>
