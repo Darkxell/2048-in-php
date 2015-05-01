@@ -8,7 +8,7 @@ https://github.com/Darkxell/2048-in-php
 /*     $_GET[] names
 
 move=(1) (Optionnal)
-score=(integer)
+score= (integer)
 c11= c12= c13= c14=
 c21= c22= c23= c24=  (int "tiles values")
 c31= c32= c33= c34=
@@ -108,6 +108,7 @@ function line_move($v1,$v2,$v3,$v4){
 /* getmoveresult : Return the GET values using the existing ones moved to a set direction.
 1 up - 2 right - 3 down - 4 left
 This doesn't generate any new tiles.
+Keep in mind that doesn't increases the score.
 (int) -> (String) */
 function getmoveresult($direction){
 	$result = "";
@@ -259,12 +260,104 @@ function hasvoid(){
 	}
 	return false;
 }
+/* getmovedscore : Get the new score of the moved direction using the current get one.
+Uses the direction in parametters.
+(integer) -> (integer)*/
+function getmovedscore( $direction ){ // #TODO
+	if($direction == 1){
+		$a1 = lm_score($_GET["c41"],$_GET["c31"],$_GET["c21"],$_GET["c11"]) ;
+		$a2 = lm_score($_GET["c42"],$_GET["c32"],$_GET["c22"],$_GET["c12"]) ;
+		$a3 = lm_score($_GET["c43"],$_GET["c33"],$_GET["c23"],$_GET["c13"]) ;
+		$a4 = lm_score($_GET["c44"],$_GET["c34"],$_GET["c24"],$_GET["c14"]) ;
+		return $_GET["score"] + $a1 + $a2 + $a3 + $a4 ;
+	}
+	if($direction == 2){
+		$a1 = lm_score($_GET["c11"],$_GET["c12"],$_GET["c13"],$_GET["c14"]) ;
+		$a2 = lm_score($_GET["c21"],$_GET["c22"],$_GET["c23"],$_GET["c24"]) ;
+		$a3 = lm_score($_GET["c31"],$_GET["c32"],$_GET["c33"],$_GET["c34"]) ;
+		$a4 = lm_score($_GET["c41"],$_GET["c42"],$_GET["c43"],$_GET["c44"]) ;
+		return $_GET["score"] + $a1 + $a2 + $a3 + $a4 ;
+	}
+	if($direction == 3){
+		$a1 = lm_score($_GET["c11"],$_GET["c21"],$_GET["c31"],$_GET["c41"]) ;
+		$a2 = lm_score($_GET["c12"],$_GET["c22"],$_GET["c32"],$_GET["c42"]) ;
+		$a3 = lm_score($_GET["c13"],$_GET["c23"],$_GET["c33"],$_GET["c43"]) ;
+		$a4 = lm_score($_GET["c14"],$_GET["c24"],$_GET["c34"],$_GET["c44"]) ;
+		return $_GET["score"] + $a1 + $a2 + $a3 + $a4 ;
+	}
+	if($direction == 4){
+		$a1 = lm_score($_GET["c14"],$_GET["c13"],$_GET["c12"],$_GET["c11"]) ;
+		$a2 = lm_score($_GET["c24"],$_GET["c23"],$_GET["c22"],$_GET["c21"]) ;
+		$a3 = lm_score($_GET["c34"],$_GET["c33"],$_GET["c32"],$_GET["c31"]) ;
+		$a4 = lm_score($_GET["c44"],$_GET["c43"],$_GET["c42"],$_GET["c41"]) ;
+		return $_GET["score"] + $a1 + $a2 + $a3 + $a4 ;
+	}
+	return 0;
+}
+/* lm_score : Get the earned score by moving the 4 tiles in the parametters
+(int,int,int,int) -> (integer)*/
+function lm_score($v1,$v2,$v3,$v4){
+	$newlinescore = 0 ;
+	if( $v4 == 0 ){
+		$v4=$v3;
+		$v3=0;
+	}
+	if( $v3 == 0 ){
+		$v3=$v2;
+		$v2=0;
+	}
+	if( $v4 == 0 ){
+		$v4=$v3;
+		$v3=0;
+	}
+	if( $v2 == 0 ){
+		$v2=$v1;
+		$v1=0;
+	}
+	if( $v3 == 0 ){
+		$v3=$v2;
+		$v2=0;
+	}
+	if( $v4 == 0 ){
+		$v4=$v3;
+		$v3=0;
+	}
+	//Merge 3 and 4
+	if( $v4 == $v3 ){
+		$v4 = $v4 * 2 ;
+		$v3 = 0 ;
+		$newlinescore = $newlinescore + $v4 ;
+	}
+	if( $v3 == 0 ){
+		$v3=$v2;
+		$v2=0;
+	}
+	if( $v2 == 0 ){
+		$v2=$v1;
+		$v1=0;
+	}
+	//Merge 2 and 3
+	if( $v3 == $v2 ){
+		$v3 = $v3 * 2 ;
+		$v2 = 0 ;
+		$newlinescore = $newlinescore + $v3 ;
+	}
+	if( $v2 == 0 ){
+		$v2=$v1;
+		$v1=0;
+	}
+	//Merge 1 and 2
+	if( $v2 == $v1 ){
+		$v2 = $v2 * 2 ;
+		$v1 = 0 ;
+		$newlinescore = $newlinescore + $v2 ;
+	}
+	return $newlinescore ;
+}
 
 
 
-/*
------End of functions-----
-*/
+/*-----End of functions-----*/
 ?>
 <?php
 /*Redirects the user with the appropriate GET values if needed.*/
@@ -284,21 +377,26 @@ if( ! isset($_GET["page"]) || $_GET["page"] == 0){
 		exit() ;
 	}	
 }
-
 /*Sets up the id of the page to display in the $page variable*/
 if(isset($_GET["page"])){
 	$page = $_GET["page"] ;
 } else {
 	$page = 0 ;
 }
-
-
 ?>
 <!Doctype html>
 <html>
 <head>
 	<!--
-		Insert Ascii art here.
+		 _____ _____   ___ _____   _               _           
+		/ __  |  _  | /   |  _  | (_)             | |          
+		`' / /| |/' |/ /| |\ V /   _ _ __    _ __ | |__  _ __  
+		  / / |  /| / /_| |/ _ \  | | '_ \  | '_ \| '_ \| '_ \ 
+		./ /__\ |_/ \___  | |_| | | | | | | | |_) | | | | |_) |
+		\_____/\___/    |_\_____/ |_|_| |_| | .__/|_| |_| .__/ 
+											| |         | |    
+											|_|         |_|    
+				Ascii art generated unsing patorjk
 	-->
 	<meta charset="UTF-8"/>
 	<title>
@@ -496,10 +594,12 @@ if(isset($_GET["page"])){
 		p.easteregg{
 			color:#fcfcfc;
 			font-size:9px;
+			cursor:default;
 		}
 		p.easteregg a{
 			text-decoration:none;
 			color:#fcfcfc;
+			cursor:default;
 		}
 		div.tile_2{
 			height:78px;
@@ -666,17 +766,17 @@ if(isset($_GET["page"])){
 			<table>
 			<tr>
 				<th></th>
-				<th class="key"><a href="<?php echo("2048.php?score=".$_GET["score"]."&move=1&".getmoveresult(1)) ; ?>">■■</a></th>
+				<th class="key"><a href="<?php echo("2048.php?score=".getmovedscore(1)."&move=1&".getmoveresult(1)) ; ?>">■■</a></th>
 				<th></th>
 			</tr>
 			<tr>
-				<th class="key"><a href="<?php echo("2048.php?score=".$_GET["score"]."&move=1&".getmoveresult(4)) ; ?>">■■</a></th>
+				<th class="key"><a href="<?php echo("2048.php?score=".getmovedscore(4)."&move=1&".getmoveresult(4)) ; ?>">■■</a></th>
 				<th></th>
-				<th class="key"><a href="<?php echo("2048.php?score=".$_GET["score"]."&move=1&".getmoveresult(2)) ; ?>">■■</a></th>
+				<th class="key"><a href="<?php echo("2048.php?score=".getmovedscore(2)."&move=1&".getmoveresult(2)) ; ?>">■■</a></th>
 			</tr>
 			<tr>
 				<th></th>
-				<th class="key"><a href="<?php echo("2048.php?score=".$_GET["score"]."&move=1&".getmoveresult(3)) ; ?>">■■</a></th>
+				<th class="key"><a href="<?php echo("2048.php?score=".getmovedscore(3)."&move=1&".getmoveresult(3)) ; ?>">■■</a></th>
 				<th></th>
 			</tr>
 			</table>
@@ -778,26 +878,26 @@ if(isset($_GET["page"])){
 			<article class="hbox">
 				<header>
 					<h1>
-						Because you won
+						Because you cheated
 					</h1>
 				</header>
 				<div class="article_body">
 					<p>
-						Hum... It seems like you indeed won the game.
+						Hum... It seems like you indeed cheated to win.
 						<br/><br/>
 						Congratulations!
 						<br/>
-						I was not expecting this... But maybe you are better than expected!
+						I was not expecting this... But maybe you are worse than expected!
 						But you achieved nothing. Do you feel happy about it? You shouldn't.
 						You lost your time here... But are you going to continue wasting it?
 						<br/>
 						Maybe... 
 						<br/><br/>
-						By the way, did you find the easter egg? I think it's worth it!
+						Maybe you should try to really beat the game now.
 						<br/><br/>
-						Thanks for playing anyways!
+						Thanks for cheating anyways!
 						<br/><br/>
-						More of my games here : [I'm a lazy developper.]
+						Click <a href="">here</a> to start a new game.
 					</p>
 				</div>
 				<div class="hidden"><br/></div>
